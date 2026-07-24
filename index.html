@@ -1,0 +1,911 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Statistics & Data Visualization</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome for Premium Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- MathJax for rendering equations -->
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']],
+                processEscapes: true
+            },
+            options: {
+                skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+            }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    
+    <!-- Link to external CSS -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-header-top">
+                    <div class="logo">
+                        <i class="fa-solid fa-chart-line"></i>
+                        <span>StatCraft</span>
+                    </div>
+                    <button class="sidebar-close-btn" id="btn-close-sidebar" title="Close Menu">
+                        <i class="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+                <p class="subtitle">পরিসংখ্যান ও চিত্রায়ন হাব</p>
+            </div>
+            
+            <div class="search-box">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input type="text" id="topic-search" placeholder="টপিক খুঁজুন...">
+            </div>
+            
+            <nav class="sidebar-nav">
+                <ul id="nav-list">
+                    <li class="nav-item active" data-target="intro">
+                        <i class="fa-solid fa-house"></i>
+                        <span>হোম ও পরিচিতি</span>
+                    </li>
+                    <li class="nav-item" data-target="tables">
+                        <i class="fa-solid fa-table"></i>
+                        <span>ওয়ান-ওয়ে ও টু-ওয়ে টেবিল</span>
+                    </li>
+                    <li class="nav-item" data-target="visualization">
+                        <i class="fa-solid fa-chart-bar"></i>
+                        <span>উপাত্ত চিত্রায়ন (Graphs)</span>
+                    </li>
+                    <li class="nav-item" data-target="central-tendency">
+                        <i class="fa-solid fa-calculator"></i>
+                        <span>কেন্দ্রীয় প্রবণতা (Mean/Median)</span>
+                    </li>
+                    <li class="nav-item" data-target="spread">
+                        <i class="fa-solid fa-arrows-left-right"></i>
+                        <span>বিস্তার পরিমাপ (Spread & IQR)</span>
+                    </li>
+                    <li class="nav-item" data-target="distribution">
+                        <i class="fa-solid fa-bell"></i>
+                        <span>স্বাভাবিক বিন্যাস ও Z-স্কোর</span>
+                    </li>
+                    <li class="nav-item" data-target="bivariate">
+                        <i class="fa-solid fa-circle-nodes"></i>
+                        <span>Covariance & Correlation</span>
+                    </li>
+                    <li class="nav-item" data-target="probability">
+                        <i class="fa-solid fa-dice"></i>
+                        <span>সম্ভাব্যতা ও বেইস থিওরেম</span>
+                    </li>
+                    <li class="nav-item" data-target="hypothesis">
+                        <i class="fa-solid fa-microscope"></i>
+                        <span>অনুকল্প যাচাই (Hypothesis Testing)</span>
+                    </li>
+                    <li class="nav-item" data-target="labs">
+                        <i class="fa-solid fa-flask"></i>
+                        <span>ইন্টারেক্টিভ ল্যাব (Calculators)</span>
+                    </li>
+                </ul>
+            </nav>
+            <div class="sidebar-footer">
+                <div class="sidebar-footer-links" style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 12px;">
+                    <a href="https://dipusardar.com" target="_blank" class="btn btn-creator btn-sm" style="width: 100%; justify-content: center; font-size: 12.5px; padding: 8px 12px;"><i class="fa-solid fa-user-astronaut"></i> Creator: Dipu</a>
+                    <button class="btn btn-pdf btn-sm" id="btn-sidebar-view-pdf" style="width: 100%; justify-content: center; font-size: 12.5px; padding: 8px 12px;"><i class="fa-solid fa-book-open"></i> PDF গাইড</button>
+                </div>
+                <p>© 2026 StatCraft. Industry Standard.</p>
+                <div class="language-badge">বাংলা + English</div>
+            </div>
+        </aside>
+
+        <!-- Sidebar Overlay (backdrop) -->
+        <div class="sidebar-overlay-backdrop" id="sidebar-backdrop"></div>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <!-- Header bar -->
+            <header class="content-header">
+                <button class="mobile-toggle" id="mobile-nav-toggle">
+                    <i class="fa-solid fa-bars"></i>
+                </button>
+                <h1 id="page-title">পরিসংখ্যান ও চিত্রায়ন হাব (Statistics & Visualization)</h1>
+                <div class="header-actions">
+                    <a href="https://dipusardar.com" target="_blank" class="btn btn-creator" title="Created by Dipu">
+                        <i class="fa-solid fa-user-astronaut"></i> Creator: Dipu
+                    </a>
+                    <button class="btn btn-pdf" id="btn-view-pdf" title="View Statistics PDF">
+                        <i class="fa-solid fa-book-open"></i> PDF গাইড
+                    </button>
+                    <button class="btn btn-outline" id="btn-quick-lab">
+                        <i class="fa-solid fa-calculator"></i> ক্যালকুলেটর ল্যাব
+                    </button>
+                </div>
+            </header>
+
+            <!-- Scrollable Content Frame -->
+            <div class="content-body" id="content-body-scroll">
+                
+                <!-- SECTION: Intro -->
+                <section id="sec-intro" class="content-section active">
+                    <div class="hero-card">
+                        <div class="hero-text">
+                            <span class="badge">Statistics & Visualization</span>
+                            <h2>পরিসংখ্যানের জগতকে জানুন সহজ ভাষায়</h2>
+                            <p>তথ্য বা উপাত্তের গভীর লুকিয়ে থাকা প্যাটার্ন খুঁজে বের করার বিজ্ঞানই হলো পরিসংখ্যান। এই ওয়েবসাইটটি তৈরি করা হয়েছে আপনাকে পরিসংখ্যানের মৌলিক সূত্রাবলি, চিত্রায়ন এবং অনুমিতি বিশ্লেষণের সমস্ত টপিক ইন্টারেক্টিভ ভিজ্যুয়ালাইজেশন ও বাস্তব উদাহরণের সাহায্যে শেখানোর জন্য।</p>
+                            <div class="hero-buttons">
+                                <button class="btn btn-primary" onclick="switchSection('tables')">শেখা শুরু করুন <i class="fa-solid fa-arrow-right"></i></button>
+                                <button class="btn btn-secondary" id="btn-hero-view-pdf"><i class="fa-solid fa-book-open"></i> PDF গাইড</button>
+                                <button class="btn btn-secondary" onclick="switchSection('labs')"><i class="fa-solid fa-flask"></i> ল্যাব</button>
+                            </div>
+                        </div>
+                        <div class="hero-image">
+                            <i class="fa-solid fa-chart-pie"></i>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-2">
+                        <div class="card card-accent">
+                            <h3><i class="fa-solid fa-database"></i> উপাত্ত বা Data কি?</h3>
+                            <p>সহজ কথায়, যেকোনো তথ্যের সংগ্রহকে (Set of information) উপাত্ত বা **Data** বলা হয়। আধুনিক মেশিন লার্নিং, ডিপ লার্নিং কিংবা ডাটা মাইনিং-এর মূল ভিত্তি হলো এই ডাটা। ডাটাকে চমৎকারভাবে সাজিয়ে আমাদের সিদ্ধান্ত নিতে সাহায্য করে পরিসংখ্যান।</p>
+                            <div class="example-box">
+                                <strong>বাস্তব উদাহরণ:</strong> একটি ক্লাসের শিক্ষার্থীদের বয়স (২২, ২৩, ২৪ বছর) বা কোনো দোকানের দৈনিক বিক্রির হিসাব হলো ডাটা।
+                            </div>
+                        </div>
+
+                        <div class="card card-accent">
+                            <h3><i class="fa-solid fa-folder-open"></i> আমাদের শেখার রোডম্যাপ</h3>
+                            <ul class="roadmap-list">
+                                <li>
+                                    <div class="roadmap-title">১. ডাটা অর্গানাইজেশন <span class="roadmap-eng">(Data Organization)</span></div>
+                                    <div class="roadmap-details">
+                                        <span class="roadmap-pill">টেবিল (Table)</span>
+                                        <span class="roadmap-pill">চলক (Variable)</span>
+                                        <span class="roadmap-pill">প্রকারভেদ (Classification)</span>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="roadmap-title">২. ডাটা ভিজ্যুয়ালাইজেশন <span class="roadmap-eng">(Data Visualization)</span></div>
+                                    <div class="roadmap-details">
+                                        <span class="roadmap-pill">বার গ্রাফ (Bar Graph)</span>
+                                        <span class="roadmap-pill">পাই চার্ট (Pie Chart)</span>
+                                        <span class="roadmap-pill">রেখাচিত্র (Line Graph)</span>
+                                        <span class="roadmap-pill">হিস্টোগ্রাম (Histogram)</span>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="roadmap-title">৩. ডেসক্রিপটিভ স্ট্যাটস <span class="roadmap-eng">(Descriptive Statistics)</span></div>
+                                    <div class="roadmap-details">
+                                        <span class="roadmap-pill">গড় (Mean)</span>
+                                        <span class="roadmap-pill">মধ্যমা (Median)</span>
+                                        <span class="roadmap-pill">প্রচুরক (Mode)</span>
+                                        <span class="roadmap-pill">ভেদাঙ্ক (Variance)</span>
+                                        <span class="roadmap-pill">পরিমিত ব্যবধান (Standard Deviation)</span>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="roadmap-title">৪. ডাটা ডিস্ট্রিবিউশন <span class="roadmap-eng">(Data Distribution)</span></div>
+                                    <div class="roadmap-details">
+                                        <span class="roadmap-pill">স্বাভাবিক বিন্যাস (Normal Distribution)</span>
+                                        <span class="roadmap-pill">জেড-স্কোর (Z-Score)</span>
+                                        <span class="roadmap-pill">এম্পিরিক্যাল রুল (Empirical Rule)</span>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="roadmap-title">৫. প্রবাবিলিটি ও বেইস <span class="roadmap-eng">(Probability & Bayes)</span></div>
+                                    <div class="roadmap-details">
+                                        <span class="roadmap-pill">সম্ভাব্যতা (Probability)</span>
+                                        <span class="roadmap-pill">স্বাধীন/অধীন ঘটনা (Independent/Dependent Events)</span>
+                                        <span class="roadmap-pill">বেইস থিওরেম (Bayes' Theorem)</span>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="roadmap-title">৬. হাইপোথিসিস টেস্টিং <span class="roadmap-eng">(Hypothesis Testing)</span></div>
+                                    <div class="roadmap-details">
+                                        <span class="roadmap-pill">Z-টেস্ট (Z-Test)</span>
+                                        <span class="roadmap-pill">T-টেস্ট (T-Test)</span>
+                                        <span class="roadmap-pill">চি-স্কয়ার টেস্ট (Chi-Square Test)</span>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- SECTION: Tables -->
+                <section id="sec-tables" class="content-section">
+                    <h2 class="section-title">ডাটা টেবিল ও চলকের প্রকারভেদ (One-Way, Two-Way Tables & Variables)</h2>
+                    
+                    <div class="grid grid-2">
+                        <div class="card">
+                            <h3><i class="fa-solid fa-table-list"></i> ডাটা টেবিল (Data Table)</h3>
+                            <p>উপাত্তকে যখন সারি (Row) এবং কলামের (Column) মাধ্যমে সুবিন্যস্তভাবে প্রকাশ করা হয়, তখন তাকে **ডাটা টেবিল** বলে। এখানে প্রতিটি সারি নির্দেশ করে একজন **ব্যক্তি বা উপাদান (Individual)** এবং কলাম নির্দেশ করে চলক বা **Variable**।</p>
+                            
+                            <div class="table-container">
+                                <table class="demo-table">
+                                    <thead>
+                                        <tr>
+                                            <th>নাম (Individual)</th>
+                                            <th>বয়স (Variable 1)</th>
+                                            <th>বেতন (Variable 2)</th>
+                                            <th>লিঙ্গ (Variable 3)</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>আকরশ</td>
+                                            <td>২২</td>
+                                            <td>$1.5k</td>
+                                            <td>পুরুষ (M)</td>
+                                        </tr>
+                                        <tr>
+                                            <td>সার্থক</td>
+                                            <td>২৩</td>
+                                            <td>$1.6k</td>
+                                            <td>পুরুষ (M)</td>
+                                        </tr>
+                                        <tr>
+                                            <td>মুসকান</td>
+                                            <td>২২</td>
+                                            <td>$2.0k</td>
+                                            <td>মহিলা (F)</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <h3><i class="fa-solid fa-shapes"></i> চলকের প্রকারভেদ (Qualitative vs Quantitative)</h3>
+                            <p>পরিসংখ্যানে আমরা যে বিষয়গুলো পরিমাপ করি, সেগুলোকে চলক বা Variable বলে। চলক মূলত দুই প্রকার:</p>
+                            
+                            <div class="variable-type-grid">
+                                <div class="var-type quantitative">
+                                    <h4>১. পরিমাণবাচক চলক (Quantitative / Numeric)</h4>
+                                    <p>যা সংখ্যায় প্রকাশ ও গণনা করা যায়। যেমন- বয়স (Age), বেতন (Salary), উচ্চতা ইত্যাদি।</p>
+                                </div>
+                                <div class="var-type qualitative">
+                                    <h4>২. গুণবাচক চলক (Qualitative / Categorical)</h4>
+                                    <p>যা কোনো শ্রেণী বা গুণ প্রকাশ করে। যেমন- লিঙ্গ (Gender - M/F), রক্তের গ্রুপ, সিনেমা জনরা ইত্যাদি।</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-2" style="margin-top: 20px;">
+                        <div class="card">
+                            <h3><i class="fa-solid fa-arrow-down-1-9"></i> ওয়ান-ওয়ে টেবিল (One-Way Table)</h3>
+                            <p>যখন আমরা একটিমাত্র চলকের ভিত্তিতে হিসাব করি, তাকে ওয়ান-ওয়ে টেবিল বলে। এখানে আমরা একটি সহজ প্রশ্ন করি - "এই মানটি কার?" যেমন: কোন ব্যক্তির বয়স কত?</p>
+                            
+                            <div class="example-box">
+                                <strong>দিকস্থিতি (Orientation):</strong> টেবিলে কলামের চেয়ে সারির সংখ্যা বেশি হলে সেটি দেখতে সহজ হয়। যদি কলাম অনেক বেশি হয়, তবে টেবিলটি উল্টে (Transpose) দেওয়া ভালো।
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <h3><i class="fa-solid fa-table-cells-large"></i> টু-ওয়ে টেবিল (Two-Way Table)</h3>
+                            <p>যখন দুটি ভিন্ন চলকের পারস্পরিক সম্পর্ক টেবিলে দেখানো হয়, তখন তাকে **টু-ওয়ে টেবিল** বলা হয়। এর সাহায্যে আমরা বড় উপাত্তের তুলনামূলক চিত্র বা যৌথ বিন্যাস বুঝতে পারি।</p>
+                            <div class="example-box">
+                                <strong>উদাহরণ:</strong> ক্রিকেট ম্যাচ জয়/পরাজয়কে ঘরের মাঠ বনাম বাইরের মাঠের সাপেক্ষে বিন্যস্ত করা।
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- SECTION: Visualization -->
+                <section id="sec-visualization" class="content-section">
+                    <h2 class="section-title">উপাত্তের চিত্রায়ন (Data Visualization Graphs)</h2>
+                    <p class="section-lead">ডাটার সংখ্যাগুলোকে যখন ছবিতে রূপান্তর করা হয়, তখন তা আমাদের চোখ ও মস্তিস্কের জন্য বোঝা সহজ হয়ে যায়। বইয়ের প্রধান ৪টি চিত্রায়ন নিচে বিশ্লেষণ করা হলো:</p>
+
+                    <div class="grid grid-2">
+                        <!-- Bar Graph -->
+                        <div class="card">
+                            <h3><i class="fa-solid fa-chart-bar"></i> ১. দণ্ডচিত্র বা বার গ্রাফ (Bar Graph)</h3>
+                            <p>গুণবাচক বা ক্যাটাগরিকাল ডাটা প্রদর্শনের জন্য বার গ্রাফ সবচেয়ে আদর্শ। প্রতিটি ক্যাটাগরির জন্য আলাদা আলাদা বার (দণ্ড) থাকে যাদের উচ্চতা বা দৈর্ঘ্য সেই ক্যাটাগরির মান নির্দেশ করে। বারগুলোর মাঝে ফাঁকা জায়গা থাকে।</p>
+                            
+                            <!-- Small Mockup Custom SVG for Bar Graph -->
+                            <div class="svg-visualizer">
+                                <svg width="100%" height="150" viewBox="0 0 300 150">
+                                    <line x1="30" y1="120" x2="280" y2="120" stroke="#0f5132" stroke-width="2"/>
+                                    <line x1="30" y1="20" x2="30" y2="120" stroke="#0f5132" stroke-width="2"/>
+                                    <!-- Bars -->
+                                    <rect x="50" y="40" width="30" height="80" fill="hsl(140, 50%, 45%)" rx="3"/>
+                                    <rect x="100" y="60" width="30" height="60" fill="hsl(140, 60%, 35%)" rx="3"/>
+                                    <rect x="150" y="30" width="30" height="90" fill="hsl(140, 70%, 25%)" rx="3"/>
+                                    <rect x="200" y="80" width="30" height="40" fill="hsl(140, 40%, 55%)" rx="3"/>
+                                    <!-- Labels -->
+                                    <text x="65" y="135" font-size="10" text-anchor="middle">আপেল</text>
+                                    <text x="115" y="135" font-size="10" text-anchor="middle">কলা</text>
+                                    <text x="165" y="135" font-size="10" text-anchor="middle">আম</text>
+                                    <text x="215" y="135" font-size="10" text-anchor="middle">লিচু</text>
+                                </svg>
+                            </div>
+                            <span class="info-note"><strong>বইয়ের উদাহরণ:</strong> বিভিন্ন ফলের পছন্দের সংখ্যা (Fruits Choice Analysis)।</span>
+                        </div>
+
+                        <!-- Pie Chart -->
+                        <div class="card">
+                            <h3><i class="fa-solid fa-chart-pie"></i> ২. বৃত্তাকার চিত্র বা পাই চার্ট (Pie Chart)</h3>
+                            <p>একটি সম্পূর্ণ অংশের (100% বা ১ অংশ) সাপেক্ষে বিভিন্ন ক্যাটাগরির অনুপাত বা শতাংশ প্রদর্শনের জন্য পাই চার্ট ব্যবহার করা হয়। এটি পুরো অংশের সাথে তুলনামূলক ভাগ দেখাতে দারুণ উপযোগী।</p>
+                            
+                            <div class="svg-visualizer">
+                                <svg width="100%" height="150" viewBox="0 0 300 150">
+                                    <circle cx="150" cy="75" r="55" fill="none" stroke="#e9ecef" stroke-width="2"/>
+                                    <!-- Slice 1: 50% -->
+                                    <path d="M 150,75 L 150,20 A 55,55 0 0,1 150,130 Z" fill="hsl(140, 60%, 35%)" />
+                                    <!-- Slice 2: 25% -->
+                                    <path d="M 150,75 L 150,130 A 55,55 0 0,1 95,75 Z" fill="hsl(140, 40%, 55%)" />
+                                    <!-- Slice 3: 25% -->
+                                    <path d="M 150,75 L 95,75 A 55,55 0 0,1 150,20 Z" fill="hsl(140, 80%, 20%)" />
+                                </svg>
+                            </div>
+                            <span class="info-note"><strong>টিপস:</strong> যখন অনেক বেশি ক্যাটাগরি থাকে, তখন পাই চার্টের চেয়ে বার গ্রাফ ব্যবহার করা বেশি যুক্তিযুক্ত।</span>
+                        </div>
+
+                        <!-- Line Graph -->
+                        <div class="card">
+                            <h3><i class="fa-solid fa-chart-line"></i> ৩. রেখাচিত্র বা লাইন গ্রাফ (Line Graph)</h3>
+                            <p>সময়ের সাথে কোনো উপাত্তের ধারাবাহিক পরিবর্তন (Trend) দেখানোর জন্য লাইন গ্রাফ অপরিহার্য। যেমন- মাসের সাথে তাপমাত্রার পরিবর্তন বা বছরের সাথে কোম্পানির লাভের গ্রাফ।</p>
+                            
+                            <div class="svg-visualizer">
+                                <svg width="100%" height="150" viewBox="0 0 300 150">
+                                    <line x1="30" y1="120" x2="280" y2="120" stroke="#0f5132" stroke-width="2"/>
+                                    <line x1="30" y1="20" x2="30" y2="120" stroke="#0f5132" stroke-width="2"/>
+                                    <!-- Path -->
+                                    <path d="M 50,100 L 100,70 L 150,80 L 200,40 L 250,50" fill="none" stroke="hsl(140, 80%, 25%)" stroke-width="3"/>
+                                    <!-- Dots -->
+                                    <circle cx="50" cy="100" r="4" fill="hsl(140, 60%, 35%)"/>
+                                    <circle cx="100" cy="70" r="4" fill="hsl(140, 60%, 35%)"/>
+                                    <circle cx="150" cy="80" r="4" fill="hsl(140, 60%, 35%)"/>
+                                    <circle cx="200" cy="40" r="4" fill="hsl(140, 60%, 35%)"/>
+                                    <circle cx="250" cy="50" r="4" fill="hsl(140, 60%, 35%)"/>
+                                </svg>
+                            </div>
+                            <span class="info-note"><strong>বইয়ের উদাহরণ:</strong> জানুয়ারি থেকে মে মাস পর্যন্ত তাপমাত্রা পরিবর্তনের প্যাটার্ন।</span>
+                        </div>
+
+                        <!-- Histogram -->
+                        <div class="card">
+                            <h3><i class="fa-solid fa-chart-simple"></i> ৪. আয়তলেখ বা হিস্টোগ্রাম (Histogram)</h3>
+                            <p>হিস্টোগ্রাম দেখতে বার গ্রাফের মতো হলেও এটি ব্যবহৃত হয় **নিরবচ্ছিন্ন সংখ্যাবাচক তথ্যের (Continuous Numerical Data)** জন্য। এখানে বারগুলোর মাঝে কোনো ফাঁকা স্থান থাকে না, কারণ প্রতিটি বার একটি রেঞ্জ বা বিরতি (Interval) নির্দেশ করে।</p>
+                            
+                            <div class="svg-visualizer">
+                                <svg width="100%" height="150" viewBox="0 0 300 150">
+                                    <line x1="30" y1="120" x2="280" y2="120" stroke="#0f5132" stroke-width="2"/>
+                                    <line x1="30" y1="20" x2="30" y2="120" stroke="#0f5132" stroke-width="2"/>
+                                    <!-- Bins adjoining each other -->
+                                    <rect x="50" y="90" width="40" height="30" fill="hsl(140, 40%, 60%)" stroke="#fff" stroke-width="1"/>
+                                    <rect x="90" y="50" width="40" height="70" fill="hsl(140, 50%, 45%)" stroke="#fff" stroke-width="1"/>
+                                    <rect x="130" y="30" width="40" height="90" fill="hsl(140, 60%, 35%)" stroke="#fff" stroke-width="1"/>
+                                    <rect x="170" y="60" width="40" height="60" fill="hsl(140, 70%, 25%)" stroke="#fff" stroke-width="1"/>
+                                    <rect x="210" y="100" width="40" height="20" fill="hsl(140, 30%, 65%)" stroke="#fff" stroke-width="1"/>
+                                    <!-- X axis labels (Intervals) -->
+                                    <text x="70" y="135" font-size="8" text-anchor="middle">১০-২০</text>
+                                    <text x="110" y="135" font-size="8" text-anchor="middle">২০-৩০</text>
+                                    <text x="150" y="135" font-size="8" text-anchor="middle">৩০-৪০</text>
+                                    <text x="190" y="135" font-size="8" text-anchor="middle">৪০-৫০</text>
+                                    <text x="230" y="135" font-size="8" text-anchor="middle">৫০-৬০</text>
+                                </svg>
+                            </div>
+                            <span class="info-note"><strong>পার্থক্য:</strong> বার গ্রাফ গুণবাচক চলকের জন্য (যেমন লাল, নীল ফল), হিস্টোগ্রাম শ্রেণী বিরতির জন্য (যেমন বয়স ১০-২০, ২০-৩০)।</span>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- SECTION: Central Tendency -->
+                <section id="sec-central-tendency" class="content-section">
+                    <h2 class="section-title">কেন্দ্রীয় প্রবণতা (Measure of Central Tendency)</h2>
+                    <p class="section-lead">ডাটার সমগ্র সেটের কেন্দ্রের বা মাঝখানের মান খুঁজে বের করার পদ্ধতিগুলোকে কেন্দ্রীয় প্রবণতার পরিমাপ বলা হয়। মাঝখানের অংশ বুঝানোর ৩টি প্রধান উপায় রয়েছে:</p>
+
+                    <div class="grid grid-3">
+                        <div class="card card-measure">
+                            <div class="measure-icon"><i class="fa-solid fa-calculator"></i></div>
+                            <h3>১. গড় বা গড় মান (Mean / Average)</h3>
+                            <p>সবগুলো উপাত্তের যোগফলকে মোট উপাত্তের সংখ্যা দিয়ে ভাগ করলে যে মান পাওয়া যায় তা-ই হলো গড়।</p>
+                            <div class="formula-box">
+                                $$\text{Mean } (\mu \text{ or } \bar{X}) = \frac{\sum X_i}{n}$$
+                            </div>
+                            <div class="example-box">
+                                <strong>উদাহরণ:</strong> $1, 2, 3, 4, 5$-এর যোগফল $15$। গড় $= 15/5 = 3$।
+                            </div>
+                        </div>
+
+                        <div class="card card-measure">
+                            <div class="measure-icon"><i class="fa-solid fa-arrow-down-up-lock"></i></div>
+                            <h3>২. মধ্যমা (Median)</h3>
+                            <p>উপাত্তগুলোকে মানের ক্রমানুসারে (ছোট থেকে বড়) সাজালে ঠিক মাঝখানের যে মানটি পাওয়া যায়, তা-ই হলো মধ্যমা।</p>
+                            <div class="formula-box" style="text-align: left; padding: 12px 20px; font-size: 13.5px;">
+                                <div style="margin-bottom: 4px;">১. বিজোড় সংখ্যা ($n$ বিজোড়) হলে:</div>
+                                <div style="font-weight: 600; margin-bottom: 8px; padding-left: 15px; color: var(--primary-green);">$\frac{n+1}{2}$-তম পদ</div>
+                                <div style="margin-bottom: 4px;">২. জোড় সংখ্যা ($n$ জোড়) হলে:</div>
+                                <div style="font-weight: 600; padding-left: 15px; color: var(--primary-green);">মাঝের দুটি পদের গড়</div>
+                            </div>
+                            <div class="example-box">
+                                <strong>উদাহরণ:</strong> $2, 2, 7, 9, 10$ সাজানোই আছে। মাঝের মান $7$-ই মধ্যমা।
+                            </div>
+                        </div>
+
+                        <div class="card card-measure">
+                            <div class="measure-icon"><i class="fa-solid fa-chart-line-up"></i></div>
+                            <h3>৩. প্রচুরক (Mode)</h3>
+                            <p>উপাত্তের মধ্যে যে মানটি সবচেয়ে বেশিবার দেখা যায়, তাকে প্রচুরক বলে। কোনো উপাত্তে একাধিক প্রচুরক থাকতে পারে বা নাও থাকতে পারে।</p>
+                            <div class="formula-box" style="padding: 24px 12px; font-size: 13.5px;">
+                                <strong>প্রচুরক (Mode)</strong> = উপাত্তে সবচেয়ে বেশিবার পুনরাবৃত্ত হওয়া মান
+                            </div>
+                            <div class="example-box">
+                                <strong>উদাহরণ:</strong> $2, 2, 7, 9, 10$ উপাত্তে $2$ আছে ২ বার। প্রচুরক $= 2$।
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card" style="margin-top: 20px;">
+                        <h3><i class="fa-solid fa-triangle-exclamation"></i> গুরুত্বপূর্ণ তুলনা: গড় বনাম মধ্যমা</h3>
+                        <p>যদি কোনো উপাত্তে অনেক বড় বা ছোট কোনো অস্বাভাবিক মান (Outlier) থাকে, তবে **গড়** সহজেই প্রভাবিত হয়ে আসল চিত্রকে পরিবর্তন করে ফেলে। কিন্তু **মধ্যমা** চরম মানের দ্বারা প্রভাবিত হয় না। তাই অস্বাভাবিক মানের ক্ষেত্রে মধ্যমাই সেরা প্রতিনিধিত্বকারী।</p>
+                    </div>
+                </section>
+
+                <!-- SECTION: Spread -->
+                <section id="sec-spread" class="content-section">
+                    <h2 class="section-title">উপাত্তের বিস্তার পরিমাপ ও আউটলায়ার (Measure of Spread, 5-Number Summary & Outliers)</h2>
+                    <p class="section-lead">ডাটার মানগুলো নিজেদের মধ্যে কতটা ছড়িয়ে ছিটিয়ে আছে বা কতটা দূরে অবস্থান করছে, তা পরিমাপ করাকেই বিস্তার পরিমাপ বলে।</p>
+
+                    <div class="grid grid-2">
+                        <div class="card">
+                            <h3><i class="fa-solid fa-arrows-left-right"></i> বিস্তারের মৌলিক পরিমাপকসমূহ</h3>
+                            <ul class="bullet-list">
+                                <li><strong>পরিসর (Range):</strong> সর্বোচ্চ মান ও সর্বনিম্ন মানের পার্থক্য।
+                                    <div class="formula-inline">$$\text{Range} = \text{Maximum} - \text{Minimum}$$</div>
+                                </li>
+                                <li><strong>চতুর্থক ব্যবধান (Interquartile Range - IQR):</strong> উপাত্তের মাঝখানের ৫০% ডাটা কতটুকু বিস্তৃত তা নির্দেশ করে। এটি তৃতীয় চতুর্থক ($Q_3$) এবং প্রথম চতুর্থক ($Q_1$) এর পার্থক্য।
+                                    <div class="formula-inline">$$\text{IQR} = Q_3 - Q_1$$</div>
+                                </li>
+                                <li><strong>ভেদাঙ্ক (Variance):</strong> উপাত্তের প্রতিটি মান গড় থেকে কত দূরে অবস্থিত তার বর্গের গড়।
+                                    <div class="formula-inline">$$\sigma^2 = \frac{\sum (X_i - \mu)^2}{N}$$</div>
+                                </li>
+                                <li><strong>পরিমিত ব্যবধান (Standard Deviation):</strong> ভেদাঙ্কের বর্গমূল। এটি সরাসরি মূল ডাটার এককে বিস্তৃতি প্রকাশ করে।
+                                    <div class="formula-inline">$$\sigma = \sqrt{\text{Variance}}$$</div>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="card">
+                            <h3><i class="fa-solid fa-border-all"></i> ৫-সংখ্যার সংক্ষিপ্তসার (5-Number Summary)</h3>
+                            <p>যেকোনো ডাটা ডিস্ট্রিবিউশনকে চমৎকারভাবে বর্ণনা করতে ৫টি নির্দিষ্ট সংখ্যা ব্যবহৃত হয়:</p>
+                            <table class="summary-table">
+                                <tr><th>১. সর্বনিম্ন মান (Minimum)</th><td>ডাটার ক্ষুদ্রতম সংখ্যা</td></tr>
+                                <tr><th>২. প্রথম চতুর্থক (First Quartile - $Q_1$)</th><td>নিচের ২৫% ডাটার সীমানা (25th Percentile)</td></tr>
+                                <tr><th>৩. মধ্যমা (Median / $Q_2$)</th><td>ঠিক মাঝখানের মান (50th Percentile)</td></tr>
+                                <tr><th>৪. তৃতীয় চতুর্থক (Third Quartile - $Q_3$)</th><td>নিচের ৭৫% ডাটার সীমানা (75th Percentile)</td></tr>
+                                <tr><th>৫. সর্বোচ্চ মান (Maximum)</th><td>ডাটার বৃহত্তম সংখ্যা</td></tr>
+                            </table>
+                            <span class="info-note">এই ৫টি সংখ্যা দিয়েই মূলত **বক্স প্লট (Box Plot)** অঙ্কন করা হয়।</span>
+                        </div>
+                    </div>
+
+                    <div class="card card-accent" style="margin-top: 20px;">
+                        <h3><i class="fa-solid fa-ban"></i> আউটলায়ার নির্ণয় (Outliers Detection: 1.5 * IQR Rule)</h3>
+                        <p>উপাত্তের যে মানগুলো প্রধান ধারা থেকে চরম বা অস্বাভাবিকভাবে বেশি বড় কিংবা ছোট, সেগুলোকে আউটলায়ার বলে। পরিসংখ্যানে আউটলায়ার সনাক্তকরণের স্ট্যান্ডার্ড নিয়ম হলো **$1.5 \times IQR$ সূত্র**।</p>
+                        <div class="formula-display">
+                            $$\text{নিম্ন সীমা (Lower Bound)} = Q_1 - 1.5 \times IQR$$
+                            $$\text{উচ্চ সীমা (Upper Bound)} = Q_3 + 1.5 \times IQR$$
+                        </div>
+                        <p>যেকোনো ডাটা যদি <strong>নিম্ন সীমার চেয়ে ছোট</strong> অথবা <strong>উচ্চ সীমার চেয়ে বড়</strong> হয়, তবে তাকে নিশ্চিতভাবে <strong>আউটলায়ার</strong> বলা যাবে।</p>
+                    </div>
+                </section>
+
+                <!-- SECTION: Distribution -->
+                <section id="sec-distribution" class="content-section">
+                    <h2 class="section-title">স্বাভাবিক বিন্যাস, এম্পিরিক্যাল রুল ও Z-স্কোর (Normal Distribution & Z-Score)</h2>
+                    
+                    <div class="grid grid-2">
+                        <div class="card">
+                            <h3><i class="fa-solid fa-bell"></i> স্বাভাবিক বিন্যাস ও ডেনসিটি কার্ভ (Normal Distribution)</h3>
+                            <p>স্বাভাবিক বিন্যাস (Normal Distribution) দেখতে একটি ঘণ্টার (Bell-shape) মতো সুষম বাঁকানো কার্ভ। এর ঠিক কেন্দ্রে থাকে গড় ($\mu$), মধ্যমা ও প্রচুরক। এর মোট ক্ষেত্রফল সর্বদা ১ বা ১০০%।</p>
+                            
+                            <h4>৬৮-৯৫-৯৯.৭ শতাংশের নীতি (Empirical Rule):</h4>
+                            <ul class="bullet-list">
+                                <li>গড়ের উভয় পাশে $1\sigma$ ব্যবধানে <strong>৬৮%</strong> উপাত্ত থাকে।</li>
+                                <li>গড়ের উভয় পাশে $2\sigma$ ব্যবধানে <strong>৯৫%</strong> উপাত্ত থাকে।</li>
+                                <li>গড়ের উভয় পাশে $3\sigma$ ব্যবধানে <strong>৯৯.৭%</strong> উপাত্ত থাকে।</li>
+                            </ul>
+                        </div>
+
+                        <div class="card">
+                            <h3><i class="fa-solid fa-font-awesome"></i> Z-Score (জেড-স্কোর)</h3>
+                            <p>যেকোনো নির্দিষ্ট ডাটা পয়েন্ট গড় থেকে কত পরিমিত ব্যবধান (Standard Deviation) দূরে অবস্থিত, তা-ই হলো জেড-স্কোর। এটি বিভিন্ন ডাটা সেটের মানকে স্ট্যান্ডার্ডাইজ বা সমকক্ষ করতে সাহায্য করে।</p>
+                            
+                            <div class="formula-box">
+                                $$Z = \frac{X - \mu}{\sigma}$$
+                                <span>যেখানে, $X$ = নির্বাচিত ডাটা, $\mu$ = গড়, $\sigma$ = পরিমিত ব্যবধান</span>
+                            </div>
+                            
+                            <div class="example-box">
+                                <strong>বাস্তব উদাহরণ:</strong> কোনো পরীক্ষায় আপনার মার্কস ৭৪, যেখানে গড় ৭০ এবং পরিমিত ব্যবধান ১০। জেড-স্কোর হবে:
+                                $$Z = \frac{74 - 70}{10} = 0.4$$
+                                অর্থাৎ, আপনার নম্বর গড়ের চেয়ে $0.4\sigma$ স্ট্যান্ডার্ড ডেভিয়েশন ডানে অবস্থিত।
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- SECTION: Bivariate -->
+                <section id="sec-bivariate" class="content-section">
+                    <h2 class="section-title">সহভেদ ও সহসম্পর্ক (Covariance and Correlation)</h2>
+                    <p class="section-lead">যখন আমরা একসাথে দুটি ভিন্ন চলকের পারস্পরিক সম্পর্কের গতিপ্রকৃতি বিশ্লেষণ করি, তখন কোভ্যারিয়েন্স এবং কোরিলেশন ব্যবহূত হয়।</p>
+
+                    <div class="grid grid-2">
+                        <div class="card">
+                            <h3><i class="fa-solid fa-arrows-spin"></i> Covariance (সহভেদ)</h3>
+                            <p>কোভ্যারিয়েন্স আমাদের বলে দুটি চলক একসাথে কিভাবে পরিবর্তিত হয়। যদি একটি চলক বৃদ্ধির সাথে সাথে অন্য চলকটিও বৃদ্ধি পায়, তবে তাদের মধ্যে <strong>পজিটিভ কোভ্যারিয়েন্স</strong> থাকে (যেমন: বয়স বৃদ্ধির সাথে সাথে বেতন বৃদ্ধি)। আর একটি বাড়লে অন্যটি কমলে তাকে বলে <strong>নেগেটিভ কোভ্যারিয়েন্স</strong> (যেমন: পরীক্ষার পড়ালেখার সময় ও ভুল করার সংখ্যা)।</p>
+                            
+                            <div class="formula-box">
+                                $$\text{Cov}(X,Y) = \frac{\sum (X_i - \bar{X})(Y_i - \bar{Y})}{n - 1}$$
+                            </div>
+                            <span class="info-note"><strong>সীমাবদ্ধতা:</strong> কোভ্যারিয়েন্স শুধুমাত্র সম্পর্কের দিক (+/-) বলতে পারে, কিন্তু সম্পর্কের শক্তি কতটুকু তা বলতে পারে না কারণ এর মান এককের ওপর নির্ভর করে।</span>
+                        </div>
+
+                        <div class="card">
+                            <h3><i class="fa-solid fa-link"></i> Correlation (সহসম্পর্ক - Pearson's r)</h3>
+                            <p>কোরিলেশন আমাদের সম্পর্কের দিক এবং শক্তি (Strength) দুটোই নিখুঁতভাবে জানাতে পারে। এর মান সর্বদা <strong>-১ থেকে +১</strong> এর মধ্যে সীমাবদ্ধ থাকে।</p>
+                            
+                            <div class="formula-box">
+                                $$r = \frac{\text{Cov}(X,Y)}{\sigma_X \cdot \sigma_Y}$$
+                            </div>
+                            
+                            <div class="correlation-scale">
+                                <div class="scale-bar"></div>
+                                <div class="scale-labels">
+                                    <span>-1 (পূর্ণ নেগেটিভ)</span>
+                                    <span>0 (সম্পর্কহীন)</span>
+                                    <span>+1 (পূর্ণ পজিটিভ)</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- SECTION: Probability -->
+                <section id="sec-probability" class="content-section">
+                    <h2 class="section-title">সম্ভাব্যতা ও বেইস থিওরেম (Probability & Bayes' Theorem)</h2>
+                    
+                    <div class="grid grid-2">
+                        <div class="card">
+                            <h3><i class="fa-solid fa-dice-d20"></i> সম্ভাব্যতা ও যোগ সূত্র (Addition Rule)</h3>
+                            <p>কোনো ঘটনা ঘটার সম্ভাবনা হলো অনুকূল ফলাফলের সংখ্যাকে মোট সম্ভাব্য ফলাফলের সংখ্যা দিয়ে ভাগ করা।</p>
+                            
+                            <h4>যোগ সূত্র (Addition Rule):</h4>
+                            <p>দুটি ঘটনার যেকোনো একটি ঘটার সম্ভাবনা $P(A \text{ or } B)$:</p>
+                            <div class="formula-display">
+                                $$P(A \cup B) = P(A) + P(B) - P(A \cap B)$$
+                            </div>
+                            <p>যদি ঘটনা দুটি পরস্পর বিচ্ছিন্ন (Mutually Exclusive) হয়, তবে তাদের একযোগে ঘটার সম্ভাবনা $P(A \cap B) = 0$। তখন সূত্রটি হয়: $P(A \cup B) = P(A) + P(B)$।</p>
+                        </div>
+
+                        <div class="card">
+                            <h3><i class="fa-solid fa-code-branch"></i> শর্তাধীন সম্ভাব্যতা (Conditional Probability)</h3>
+                            <p>একটি ঘটনা $B$ ইতিমধ্যে ঘটে গেছে এই শর্তে অপর একটি ঘটনা $A$ ঘটার সম্ভাব্যতাকে শর্তাধীন সম্ভাব্যতা বলে।</p>
+                            <div class="formula-box">
+                                $$P(A|B) = \frac{P(A \cap B)}{P(B)}$$
+                            </div>
+                            <p>যদি $A$ ও $B$ স্বাধীন (Independent) ঘটনা হয়, তবে $P(A|B) = P(A)$ হয়। কারণ $B$ ঘটা বা না ঘটা $A$-এর সম্ভাব্যতাকে প্রভাবিত করে না।</p>
+                        </div>
+                    </div>
+
+                    <div class="card card-accent" style="margin-top: 20px;">
+                        <h3><i class="fa-solid fa-brain"></i> বেইস থিওরেম (Bayes' Theorem)</h3>
+                        <p><strong>সহজ কথায়:</strong> যদি আমাদের কোনো ফলাফলের (Effect) কারণ জানা থাকে, তবে ফলাফল পাওয়ার পর সেই সুনির্দিষ্ট কারণটি সক্রিয় থাকার সম্ভাবনা কতটুকু তা নির্ণয় করাই হলো বেইস থিওরেম। এটি পূর্ববর্তী বিশ্বাসের (Prior) সাথে নতুন প্রমাণের (Evidence) সমন্বয় ঘটায়।</p>
+                        
+                        <div class="formula-display">
+                            $$P(A|B) = \frac{P(B|A) \cdot P(A)}{P(B)}$$
+                        </div>
+                        
+                        <div class="grid grid-2" style="margin-top: 15px;">
+                            <div>
+                                <h5>বইয়ের করোনা উদাহরণ (Banglish & Bengali Intuition):</h5>
+                                <p>একজন ব্যক্তি করোনা পজিটিভ ($B$), আর সে কোনো করোনা রোগীর সংস্পর্শে এসেছিল ($A$)। সংস্পর্শে আসার পর তার করোনা পজিটিভ হওয়ার চান্স কত?</p>
+                                <p>$$P(\text{Corona}|\text{Contact}) = \frac{P(\text{Contact}|\text{Corona}) \cdot P(\text{Corona})}{P(\text{Contact})}$$</p>
+                            </div>
+                            <div>
+                                <h5>বইয়ের ডাইস উদাহরণ:</h5>
+                                <p>আমাদের কাছে একটি স্বাভাবিক ডাইস এবং একটি বায়াসড ডাইস (যা ৫০% সময় ৬ দেয়) আছে। না দেখে একটি ডাইস তুলে রোল করে ৬ পাওয়া গেল। ডাইসটি বায়াসড হওয়ার সম্ভাবনা কত?</p>
+                                <p>বেইস থিওরেম প্রয়োগ করে আমরা পাই এটার উত্তর হলো <strong>৩/৪ বা ৭৫%</strong>। (ক্যালকুলেটর ট্যাবে গিয়ে এটি নিজে পরিবর্তন করে দেখতে পারেন)।</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- SECTION: Hypothesis -->
+                <section id="sec-hypothesis" class="content-section">
+                    <h2 class="section-title">অনুমিতি ও অনুকল্প যাচাই (Inferential Stats & Hypothesis Testing)</h2>
+                    
+                    <div class="grid grid-2">
+                        <div class="card">
+                            <h3><i class="fa-solid fa-binoculars"></i> Descriptive vs Inferential Stats</h3>
+                            <p><strong>ডেসক্রিপটিভ স্ট্যাটিসটিক্স:</strong> যেখানে উপাত্তকে শুধুমাত্র চার্ট বা গড়ের সাহায্যে বর্ণনা করা হয়।</p>
+                            <p><strong>ইনফারেন্সিয়াল স্ট্যাটিসটিক্স:</strong> যেখানে নমুনার (Sample) উপাত্ত পরীক্ষা করে সামগ্রিক জনসংখ্যা (Population) সম্পর্কে ভবিষ্যৎবাণী বা চূড়ান্ত সিদ্ধান্ত গ্রহণ করা হয়। এর প্রধান হাতিয়ার হলো অনুকল্প যাচাই বা **Hypothesis Testing**।</p>
+                        </div>
+
+                        <div class="card">
+                            <h3><i class="fa-solid fa-gavel"></i> অনুকল্প যাচাই-এর মূল ধারণা (Null vs Alternative)</h3>
+                            <p>অনুকল্প যাচাই করার সময় আমরা দুটি বিপরীত অনুকল্প তৈরি করি:</p>
+                            <ul class="bullet-list">
+                                <li><strong>Null Hypothesis ($H_0$ - নাস্তি অনুকল্প):</strong> এটি ইতিবাচক দিক ধরে। আইনি পরিভাষার মতো 'যতক্ষণ না দোষী সাব্যস্ত হচ্ছে ততক্ষণ নির্দোষ' (Innocent until proven guilty)। অর্থাৎ কোনো পার্থক্য বা পরিবর্তন নেই।</li>
+                                <li><strong>Alternative Hypothesis ($H_a$ - বিকল্প অনুকল্প):</strong> এটি নাস্তি অনুকল্পের সম্পূর্ণ বিপরীত। অর্থাৎ পরিবর্তন বা পার্থক্য আছে।</li>
+                            </ul>
+                            <p><strong>P-value বনাম Significance Level ($\alpha$):</strong> যদি আমাদের অর্জিত P-value তাৎপর্যপূর্ণ মাত্রা $\alpha$ (সাধারণত ৫% বা ০.০৫) এর চেয়ে ছোট হয়, তবে আমরা $H_0$ বাতিল (Reject) করি। আর বড় হলে Fail to Reject করি।</p>
+                        </div>
+                    </div>
+
+                    <div class="card" style="margin-top: 20px;">
+                        <h3><i class="fa-solid fa-network-wired"></i> অনুকল্প পরীক্ষার প্রকারভেদ (Z-Test, T-Test, Chi-Square Test)</h3>
+                        <div class="test-types-grid">
+                            <div class="test-card">
+                                <h5>Z-Test</h5>
+                                <p><strong>শর্ত:</strong> নমুনার সংখ্যা $n \ge 30$ হতে হবে এবং পপুলেশন পরিমিত ব্যবধান ($\sigma$) জানা থাকতে হবে।</p>
+                                <p>$$Z = \frac{\bar{X} - \mu}{\sigma / \sqrt{n}}$$</p>
+                            </div>
+                            <div class="test-card">
+                                <h5>T-Test</h5>
+                                <p><strong>শর্ত:</strong> নমুনার সংখ্যা ৩০ এর কম হলে এবং পপুলেশন পরিমিত ব্যবধান ($\sigma$) অজানা থাকলে। এখানে Degree of Freedom ($df = n-1$) গণনা করা হয়।</p>
+                                <p>$$t = \frac{\bar{X} - \mu}{s / \sqrt{n}}$$</p>
+                            </div>
+                            <div class="test-card">
+                                <h5>Chi-Square Test ($\chi^2$)</h5>
+                                <p><strong>উদ্দেশ্য:</strong> দুটি গুণবাচক বা ক্যাটাগরিকাল চলকের মধ্যে কোনো তাৎপর্যপূর্ণ সম্পর্ক আছে কি না তা যাচাই করতে।</p>
+                                <p>$$\chi^2 = \sum \frac{(O_i - E_i)^2}{E_i}$$</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- SECTION: Labs -->
+                <section id="sec-labs" class="content-section">
+                    <h2 class="section-title">ইন্টারেক্টিভ পরিসংখ্যান ল্যাব (Interactive Calculator Labs)</h2>
+                    <p class="section-lead">এখানে আপনি বিভিন্ন মান পরিবর্তন করে হাতে-কলমে পরিসংখ্যানের সূত্রগুলোর প্রভাব দেখতে পারবেন।</p>
+
+                    <!-- Tabs inside Calculator Lab -->
+                    <div class="tab-container">
+                        <div class="tab-headers">
+                            <button class="tab-btn active" onclick="switchTab('tab-desc')">১. ডেসক্রিপটিভ স্ট্যাটস</button>
+                            <button class="tab-btn" onclick="switchTab('tab-zscore')">২. Z-Score ও বেল কার্ভ</button>
+                            <button class="tab-btn" onclick="switchTab('tab-bayes')">৩. বেইস থিওরেম</button>
+                            <button class="tab-btn" onclick="switchTab('tab-hypothesis')">৪. অনুকল্প যাচাই ল্যাব</button>
+                        </div>
+
+                        <!-- Tab 1: Descriptive Stats -->
+                        <div id="tab-desc" class="tab-content active">
+                            <div class="lab-row">
+                                <div class="lab-inputs">
+                                    <h4>সংখ্যা বা উপাত্ত ইনপুট দিন</h4>
+                                    <p class="input-desc">সংখ্যাগুলো কমা ( , ) দিয়ে আলাদা করে লিখুন।</p>
+                                    <textarea id="desc-input" rows="3" placeholder="যেমন: 22, 23, 24, 25, 22, 18, 30"></textarea>
+                                    <div class="input-actions" style="margin-top: 10px;">
+                                        <button class="btn btn-primary" onclick="calculateDescriptiveStats()">হিসাব করুন</button>
+                                        <button class="btn btn-outline" onclick="loadSampleData('desc')">নমুনা ডাটা লোড করুন</button>
+                                    </div>
+                                </div>
+                                <div class="lab-results" id="desc-results-box">
+                                    <p class="placeholder-text">ফলাফল দেখতে উপাত্ত ইনপুট দিয়ে "হিসাব করুন" বাটনে ক্লিক করুন।</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Tab 2: Z-Score & Bell Curve -->
+                        <div id="tab-zscore" class="tab-content">
+                            <div class="lab-row">
+                                <div class="lab-inputs">
+                                    <h4>Z-Score ও স্বাভাবিক বিন্যাস</h4>
+                                    <div class="form-group">
+                                        <label for="z-val-x">ডাটা পয়েন্ট মান ($X$):</label>
+                                        <input type="number" id="z-val-x" value="74" step="any">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="z-mean">গড় ($\mu$):</label>
+                                        <input type="number" id="z-mean" value="70" step="any">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="z-sd">পরিমিত ব্যবধান ($\sigma$):</label>
+                                        <input type="number" id="z-sd" value="10" step="any">
+                                    </div>
+                                    <button class="btn btn-primary" onclick="calculateZScoreLab()" style="margin-top: 15px; width: 100%;">জেড-স্কোর ও গ্রাফ আপডেট করুন</button>
+                                </div>
+                                <div class="lab-results">
+                                    <div class="z-output-card">
+                                        <div id="z-score-math-output">
+                                            <!-- Computed equations will display here -->
+                                        </div>
+                                        <div class="curve-container">
+                                            <svg id="normal-curve-svg" width="100%" height="220" viewBox="0 0 400 220">
+                                                <!-- Drawn dynamically by JS -->
+                                            </svg>
+                                        </div>
+                                        <p id="z-score-interpretation" class="interpretation-text"></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Tab 3: Bayes Theorem -->
+                        <div id="tab-bayes" class="tab-content">
+                            <div class="lab-row">
+                                <div class="lab-inputs">
+                                    <h4>বেইস থিওরেম ল্যাব</h4>
+                                    <div class="form-group">
+                                        <label for="bayes-type">সিচুয়েশন সিলেক্ট করুন:</label>
+                                        <select id="bayes-type" onchange="toggleBayesInputs()">
+                                            <option value="corona">১. করোনা টেস্ট (মেডিকেল ডায়াগনসিস)</option>
+                                            <option value="dice">২. ফেয়ার বনাম বায়াসড ছক্কা (Dice Roll)</option>
+                                        </select>
+                                    </div>
+                                    
+                                    <!-- Dynamic Inputs based on type -->
+                                    <div id="bayes-inputs-corona">
+                                        <div class="form-group">
+                                            <label for="b-prior">করোনা আক্রান্ত হওয়ার পূর্ব সম্ভাবনা $P(\text{Corona})$:</label>
+                                            <input type="number" id="b-prior" value="0.01" min="0" max="1" step="0.001">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="b-sens">টেস্টের সেনসিটিভিটি $P(\text{Pos}|\text{Corona})$:</label>
+                                            <input type="number" id="b-sens" value="0.99" min="0" max="1" step="0.01">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="b-fpr">টেস্টের ফলস পজিটিভ রেট $P(\text{Pos}|\text{Healthy})$:</label>
+                                            <input type="number" id="b-fpr" value="0.01" min="0" max="1" step="0.01">
+                                        </div>
+                                    </div>
+                                    
+                                    <div id="bayes-inputs-dice" style="display: none;">
+                                        <div class="form-group">
+                                            <label for="bd-prior">বায়াসড ছক্কা তোলার সম্ভাবনা $P(\text{Biased})$:</label>
+                                            <input type="number" id="bd-prior" value="0.5" min="0" max="1" step="0.1">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="bd-biased-prob">বায়াসড ছক্কায় ৬ ওঠার সম্ভাবনা $P(6|\text{Biased})$:</label>
+                                            <input type="number" id="bd-biased-prob" value="0.5" min="0" max="1" step="0.05">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="bd-fair-prob">ফেয়ার ছক্কায় ৬ ওঠার সম্ভাবনা $P(6|\text{Fair})$:</label>
+                                            <input type="number" id="bd-fair-prob" value="0.1667" readonly>
+                                        </div>
+                                    </div>
+                                    
+                                    <button class="btn btn-primary" onclick="calculateBayesLab()" style="margin-top: 15px; width: 100%;">বেইস থিওরেম প্রয়োগ করুন</button>
+                                </div>
+                                <div class="lab-results" id="bayes-results-box">
+                                    <!-- Results shown here -->
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Tab 4: Hypothesis Testing -->
+                        <div id="tab-hypothesis" class="tab-content">
+                            <div class="lab-row">
+                                <div class="lab-inputs">
+                                    <h4>অনুকল্প যাচাই ল্যাব (Hypothesis Test)</h4>
+                                    <div class="form-group">
+                                        <label for="hyp-test-type">পরীক্ষার ধরণ:</label>
+                                        <select id="hyp-test-type" onchange="toggleHypothesisInputs()">
+                                            <option value="ztest">One-Sample Z-Test</option>
+                                            <option value="ttest">One-Sample T-Test</option>
+                                            <option value="chisq">Chi-Square Test (Independence)</option>
+                                        </select>
+                                    </div>
+                                    
+                                    <!-- Z-Test Inputs -->
+                                    <div id="hyp-inputs-z">
+                                        <div class="form-group">
+                                            <label for="hz-xbar">নমুনা গড় ($\bar{X}$):</label>
+                                            <input type="number" id="hz-xbar" value="74" step="any">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="hz-mu">জনসংখ্যা গড় ($\mu$):</label>
+                                            <input type="number" id="hz-mu" value="70" step="any">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="hz-sigma">পপুলেশন স্ট্যান্ডার্ড ডেভিয়েশন ($\sigma$):</label>
+                                            <input type="number" id="hz-sigma" value="10" step="any">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="hz-n">নমুনার সংখ্যা ($n$):</label>
+                                            <input type="number" id="hz-n" value="36" step="1">
+                                        </div>
+                                    </div>
+
+                                    <!-- T-Test Inputs -->
+                                    <div id="hyp-inputs-t" style="display: none;">
+                                        <div class="form-group">
+                                            <label for="ht-xbar">নমুনা গড় ($\bar{X}$):</label>
+                                            <input type="number" id="ht-xbar" value="145" step="any">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="ht-mu">দাবীকৃত পপুলেশন গড় ($\mu$):</label>
+                                            <input type="number" id="ht-mu" value="150" step="any">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="ht-s">নমুনা স্ট্যান্ডার্ড ডেভিয়েশন ($s$):</label>
+                                            <input type="number" id="ht-s" value="8" step="any">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="ht-n">নমুনার সংখ্যা ($n < 30$):</label>
+                                            <input type="number" id="ht-n" value="10" step="1">
+                                        </div>
+                                    </div>
+
+                                    <!-- Chi-Square Inputs -->
+                                    <div id="hyp-inputs-chisq" style="display: none;">
+                                        <p class="input-desc">২x২ টেবিল (লিঙ্গ বনাম পছন্দ):</p>
+                                        <table class="chisq-input-table">
+                                            <thead>
+                                                <tr>
+                                                    <th></th>
+                                                    <th>পছন্দ A (যেমন: কোক)</th>
+                                                    <th>পছন্দ B (যেমন: পেপসি)</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <th>পুরুষ (Male)</th>
+                                                    <td><input type="number" id="c-m-a" value="30"></td>
+                                                    <td><input type="number" id="c-m-b" value="10"></td>
+                                                </tr>
+                                                <tr>
+                                                    <th>মহিলা (Female)</th>
+                                                    <td><input type="number" id="c-f-a" value="15"></td>
+                                                    <td><input type="number" id="c-f-b" value="25"></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+
+                                    <div class="form-group" style="margin-top: 10px;">
+                                        <label for="hyp-alpha">তাৎপর্যপূর্ণ মাত্রা ($\alpha$):</label>
+                                        <select id="hyp-alpha">
+                                            <option value="0.05" selected>0.05 (৫%)</option>
+                                            <option value="0.01">0.01 (১%)</option>
+                                            <option value="0.10">0.10 (১০%)</option>
+                                        </select>
+                                    </div>
+                                    
+                                    <button class="btn btn-primary" onclick="calculateHypothesisLab()" style="margin-top: 15px; width: 100%;">অনুকল্প যাচাই করুন</button>
+                                </div>
+                                <div class="lab-results" id="hyp-results-box">
+                                    <!-- Results shown here -->
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </section>
+
+            </div>
+        </main>
+    </div>
+
+    <!-- PDF Preview Modal -->
+    <div id="pdf-modal" class="modal-overlay">
+        <div class="modal-container">
+            <div class="modal-header">
+                <h3><i class="fa-solid fa-file-pdf"></i> Statistics.pdf Preview</h3>
+                <div class="modal-actions">
+                    <a href="Statistics.pdf" download class="btn btn-primary btn-sm"><i class="fa-solid fa-download"></i> ডাউনলোড</a>
+                    <button id="close-pdf-modal" class="btn-close"><i class="fa-solid fa-xmark"></i></button>
+                </div>
+            </div>
+            <div class="modal-body">
+                <iframe src="Statistics.pdf" width="100%" height="100%" style="border: none;"></iframe>
+            </div>
+        </div>
+    </div>
+
+    <!-- Link to external JS -->
+    <script src="app.js"></script>
+</body>
+</html>
